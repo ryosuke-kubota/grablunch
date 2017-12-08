@@ -46,6 +46,14 @@ class AppLocalizations {
     );
   }
 
+  String get titleGroups {
+    return Intl.message(
+      'Groups',
+      name: 'titleGroups',
+      desc: 'Title for the groups view',
+    );
+  }
+
   String get send {
     return Intl.message(
       'Send',

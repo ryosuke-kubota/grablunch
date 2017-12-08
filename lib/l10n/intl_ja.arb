@@ -17,6 +17,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "titleGroups": "グループ",
+  "@titleChat": {
+    "description": "Title for the groups view",
+    "type": "text",
+    "placeholders": {}
+  },
   "send": "送る",
   "@send": {
     "description": "Chat view Button description",

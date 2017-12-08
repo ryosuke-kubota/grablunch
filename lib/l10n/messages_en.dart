@@ -21,6 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sendMessage" : MessageLookupByLibrary.simpleMessage("Send a message"),
     "title" : MessageLookupByLibrary.simpleMessage("Should we go eat lunch together?"),
     "titleChat" : MessageLookupByLibrary.simpleMessage("Where should we eat?"),
-    "titleList" : MessageLookupByLibrary.simpleMessage("Let\'s eat together!")
+    "titleList" : MessageLookupByLibrary.simpleMessage("Let\'s eat together!"),
+    "titleGroups" : MessageLookupByLibrary.simpleMessage("Groups")
   };
 }

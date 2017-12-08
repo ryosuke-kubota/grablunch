@@ -9,23 +9,23 @@ import 'package:grablunch/auth.dart'
 import 'package:grablunch/filters.dart' show filterToday;
 import 'package:grablunch/localization.dart' show AppLocalizations;
 
-class ListScreen extends StatefulWidget {
+class GroupsScreen extends StatefulWidget {
   @override
-  State createState() => new ListScreenState();
+  State createState() => new GroupsScreenState();
 }
 
-class ListScreenState extends State<ListScreen> {
-  final reference = FirebaseDatabase.instance.reference().child('lunchers');
-  String _luncherKey;
-  final Icon joinIcon = new Icon(Icons.local_dining);
+class GroupsScreenState extends State<GroupsScreen> {
+  final reference = FirebaseDatabase.instance.reference().child('groups');
+  String _groupKey;
+  final Icon addIcon = new Icon(Icons.group_add);
   final Icon cancelIcon = new Icon(Icons.close);
-  ListScreenState() {
+  GroupsScreenState() {
     reference.keepSynced(true);
-    _checkIfLuncher();
-    reference.onChildChanged.listen((Event event) => _checkIfLuncher());
+    _checkIfGroup();
+    reference.onChildChanged.listen((Event event) => _checkIfGroup());
   }
 
-  Future<Null> _checkIfLuncher() async {
+  Future<Null> _checkIfGroup() async {
     await ensureLoggedIn();
     DataSnapshot snapshot = await filterToday(reference).once();
     String _newKey;
@@ -34,9 +34,9 @@ class ListScreenState extends State<ListScreen> {
         _newKey = key;
       }
     });
-    if (_luncherKey != _newKey) {
+    if (_groupKey != _newKey) {
       setState(() {
-        _luncherKey = _newKey;
+        _groupKey = _newKey;
       });
     }
   }
@@ -45,25 +45,15 @@ class ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(AppLocalizations.of(context).titleList),
+        title: new Text(AppLocalizations.of(context).titleGroups),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         actions: <Widget>[
-          new IconButton(
-            icon: new Icon(Icons.chat),
-            tooltip: AppLocalizations.of(context).chat,
-            onPressed: () => Navigator.of(context).pushNamed('/chat'),
-          ),
-          new IconButton(
-            icon: new Icon(Icons.chat),
-            tooltip: AppLocalizations.of(context).chat,
-            onPressed: () => Navigator.of(context).pushNamed('/groups'),
-          ),
         ],
       ),
       body: new Container(
         child: new Column(
           children: <Widget>[
-            // List of Lunchers
+            // List of Groups
             new Flexible(
               child: new FirebaseAnimatedList(
                 query: filterToday(reference),
@@ -88,8 +78,8 @@ class ListScreenState extends State<ListScreen> {
       ),
       // Grab lunch button
       floatingActionButton: new FloatingActionButton(
-        child: (_luncherKey != null) ? cancelIcon : joinIcon,
-        tooltip: (_luncherKey != null) ? 'Cancel' : 'Join',
+        child: (_groupKey != null) ? cancelIcon : addIcon,
+        tooltip: (_groupKey != null) ? 'Cancel' : 'Join',
         onPressed: () => _handleSubmitted(),
       ),
     );
@@ -97,7 +87,7 @@ class ListScreenState extends State<ListScreen> {
 
   Future<Null> _handleSubmitted() async {
     await ensureLoggedIn();
-    (_luncherKey != null) ? _cancelLunch() : _joinLunch();
+    (_groupKey != null) ? _cancelLunch() : _joinLunch();
   }
 
   void _joinLunch() {
@@ -106,13 +96,13 @@ class ListScreenState extends State<ListScreen> {
       'photoUrl': googleSignIn.currentUser.photoUrl,
       'date': new DateTime.now().millisecondsSinceEpoch,
     });
-    _checkIfLuncher();
+    _checkIfGroup();
     analytics.logEvent(name: 'join_lunch');
   }
 
   void _cancelLunch() {
-    reference.child(_luncherKey).remove();
-    _checkIfLuncher();
+    reference.child(_groupKey).remove();
+    _checkIfGroup();
     analytics.logEvent(name: 'cancel_lunch');
   }
 }

@@ -17,6 +17,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "titleGroups": "Groups",
+  "@titleChat": {
+    "description": "Title for the groups view",
+    "type": "text",
+    "placeholders": {}
+  },
   "send": "Send",
   "@send": {
     "description": "Chat view Button description",
