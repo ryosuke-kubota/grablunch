@@ -80,7 +80,27 @@ class GroupsScreenState extends State<GroupsScreen> {
       floatingActionButton: new FloatingActionButton(
         child: (_groupKey != null) ? cancelIcon : addIcon,
         tooltip: (_groupKey != null) ? 'Cancel' : 'Join',
-        onPressed: () => _handleSubmitted(),
+        onPressed: () => _askedToLead(),
+      ),
+    );
+  }
+
+  Future<Null> _askedToLead() async {
+    await showDialog<Null>(
+      context: context,
+      child: new SimpleDialog(
+        title: const Text('Create Group'),
+        children: <Widget>[
+          new SimpleDialogOption(
+            child: const Text('Group Name'),
+          ),
+          new SimpleDialogOption(
+            child: const Text('input'),
+          ),
+          new SimpleDialogOption(
+            child: const Text('button'),
+          ),
+        ],
       ),
     );
   }
