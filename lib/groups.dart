@@ -16,6 +16,7 @@ class GroupsScreen extends StatefulWidget {
 
 class GroupsScreenState extends State<GroupsScreen> {
   final reference = FirebaseDatabase.instance.reference().child('groups');
+  final TextEditingController _controller = new TextEditingController();
   String _groupKey;
   final Icon addIcon = new Icon(Icons.group_add);
   final Icon cancelIcon = new Icon(Icons.close);
@@ -95,36 +96,53 @@ class GroupsScreenState extends State<GroupsScreen> {
             child: const Text('Group Name'),
           ),
           new SimpleDialogOption(
-            child: const Text('input'),
+            child: new TextField(
+              controller: _controller,
+              decoration: new InputDecoration(
+                hintText: 'Type something',
+              ),
+            ),
           ),
           new SimpleDialogOption(
-            child: const Text('button'),
+            child: new FlatButton(
+              child: new Text('作成する'),
+              onPressed: () => _createGroup(),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Future<Null> _handleSubmitted() async {
-    await ensureLoggedIn();
-    (_groupKey != null) ? _cancelLunch() : _joinLunch();
-  }
-
-  void _joinLunch() {
+  void _createGroup() {
     reference.push().set({
-      'name': googleSignIn.currentUser.displayName,
-      'photoUrl': googleSignIn.currentUser.photoUrl,
+      'name': _controller.text,
       'date': new DateTime.now().millisecondsSinceEpoch,
     });
-    _checkIfGroup();
-    analytics.logEvent(name: 'join_lunch');
+    Navigator.of(context).pop(false);
+    _controller.clear();
   }
 
-  void _cancelLunch() {
-    reference.child(_groupKey).remove();
-    _checkIfGroup();
-    analytics.logEvent(name: 'cancel_lunch');
-  }
+  // Future<Null> _handleSubmitted() async {
+  //   await ensureLoggedIn();
+  //   (_groupKey != null) ? _cancelLunch() : _joinLunch();
+  // }
+
+  // void _joinLunch() {
+  //   reference.push().set({
+  //     'name': googleSignIn.currentUser.displayName,
+  //     'photoUrl': googleSignIn.currentUser.photoUrl,
+  //     'date': new DateTime.now().millisecondsSinceEpoch,
+  //   });
+  //   _checkIfGroup();
+  //   analytics.logEvent(name: 'join_lunch');
+  // }
+
+  // void _cancelLunch() {
+  //   reference.child(_groupKey).remove();
+  //   _checkIfGroup();
+  //   analytics.logEvent(name: 'cancel_lunch');
+  // }
 }
 
 class ListItem extends StatelessWidget {
@@ -138,21 +156,22 @@ class ListItem extends StatelessWidget {
       sizeFactor: new CurvedAnimation(parent: animation, curve: Curves.easeOut),
       axisAlignment: 0.0,
       child: new Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: new Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            new Container(
-                margin: const EdgeInsets.only(right: 16.0),
-                child: new CircleAvatar(
-                  backgroundImage: new NetworkImage(snapshot.value['photoUrl']),
-                )),
-            new Column(
-              children: <Widget>[
-                new Text(snapshot.value['name']),
-              ],
-            ),
-          ],
+        child: new ListTile(
+          title: new Text(snapshot.value['name']),
+          onTap: () => Navigator.of(context).pushNamed('/groups/L03GXhSUGXhVe-qhI5P/chat'),
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          // children: <Widget>[
+          //   // new Container(
+          //   //     margin: const EdgeInsets.only(right: 16.0),
+          //   //     child: new CircleAvatar(
+          //   //       backgroundImage: new NetworkImage(snapshot.value['photoUrl']),
+          //   //     )),
+          //   new Column(
+          //     children: <Widget>[
+          //       new Text(snapshot.value['name']),
+          //     ],
+          //   ),
+          // ],
         ),
       ),
     );

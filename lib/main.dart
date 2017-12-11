@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:grablunch/list.dart' show ListScreen;
 import 'package:grablunch/chat.dart' show ChatScreen;
 import 'package:grablunch/groups.dart' show GroupsScreen;
+import 'package:grablunch/groupChat.dart' show GroupChatScreen;
 import 'package:grablunch/localization.dart'
     show AppLocalizations, AppLocalizationsDelegate;
 
@@ -39,6 +40,7 @@ class GrabLunchApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/chat': (BuildContext context) => new ChatScreen(),
         '/groups': (BuildContext context) => new GroupsScreen(),
+        '/groups/{groupId}/chat': (BuildContext context) => new GroupChatScreen(),
       },
     );
   }
